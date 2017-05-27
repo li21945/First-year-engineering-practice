@@ -58,5 +58,228 @@ Compile=1
 Link=1
 Priority=1000
 OverrideBuildCmd=0
-BuildCmd=
+BuildCmd =
+//
+//
+//
+#include<stdio.h>
+#include<math.h>
+#include<stdlib.h>
+#include<time.h>
+#include<string.h>
+
+
+int hour, mintue, second;
+int i;//时间
+int flag = 0;
+
+
+void update();
+void display();
+void delay();//时间函数
+struct student
+{
+	int nub;
+	char name[50];
+	char sex[10];
+	char grade[20];
+};
+
+
+int main()
+{
+	int rand();
+	int a, b;
+	int n,num;//score判定，n学生顺序和num数量判定 
+	struct student stu[50];
+	int score[50];
+
+	printf("<---您好，欢迎进入登入界面--->\n");
+	system("pause");//getchar();也是类似功能
+	printf("<---请先矫正时间，输入现在时间【空格分开】：-->\n");
+	scanf("%d%d%d", &hour, &mintue, &second);
+	printf("<---欢迎来到签到页面，希望你今天愉快--->\n");
+	system("pause");
+
+	for (i = 1; i < 100000; i++) {//时间运行
+		update();
+		display();
+		delay();
+		goto mainInterface;
+	}
+
+
+	/*******************主页面*************************/
+mainInterface:
+	system("cls");
+	puts("1.指纹签到页面\n");
+	puts("2.账户信息管理\n");
+	puts("3.记录管理\n");
+	puts("========  =========\n");
+	printf("请选择：\n");
+	scanf("%d", &flag);
+
+
+	//*********************指纹签到页面****************
+	if (flag == 1) 
+	{
+		printf("请输入该学生的顺序：\n");
+		scanf("%d",&n);//输入顺序，进行判断
+		printf("请指纹签到\n");
+
+
+		srand(time(NULL));//设置随机数种子。跟时间有关！！！
+		int c = rand()%2; // (RAND_MAX + 2.0);
+		if (c = 0) //随机判断，时间限定 
+		{
+			printf("同学你好，签到成功！\n");
+			printf("回到主页请继续！");
+			score[n-1]=0;
+			getchar();
+		}
+		else
+		{ 
+			printf("同学你好，恭喜你中大奖，德育分先扣两分！\n");
+			score[n-1]=1;
+			puts("1.手动签到请输入\n");
+			puts("2.放弃签到\n");
+			puts("3.返回主页面\n");
+			puts("========  =========\n");
+			printf("请选择：\n");
+			scanf("%d", &flag);
+			if (flag == 1) 
+			{ 
+				printf("签到成功！");
+				score[n-1]=0;
+			} 
+			if (flag == 2)
+			{ 
+				printf("签到失败");
+				score[n-1]=1;
+			} 
+			if (flag == 3)
+				goto mainInterface;
+			else
+				printf("It's error");
+		}
+	}
+
+
+	//*************************账户信息管理*******************	
+	if (flag == 2)
+	 {		
+		system("cls");//清屏
+		puts("1.信息注册\n");
+		puts("2.信息修改\n");
+		puts("3.返回主页面\n");
+		puts("========  =========\n");
+		printf("请选择：\n");
+		scanf("%d", &flag);
+
+
+		if (flag == 1) 
+		{
+			printf("你要输入多少个学生：");
+			scanf("%d",&num);
+			printf("请输入学生信息.格式【学号 姓名 性别 班级】:\n");
+			for (a = 0; a < num; a++)
+			{
+				printf("请输入第%d个同学的信息：",a+1);
+				scanf("%d%s %s %s",&stu[a].nub,stu[a].name,stu[a].sex,stu[a].grade); 				
+			}
+			goto mainInterface;
+
+		}//信息输入 
+		if (flag == 2) {
+			printf("请输入要修改的同学的顺序：") ;
+			scanf("%d",&n);
+			scanf("%d%s %s %s",&stu[n-1].nub,stu[n-1].name,stu[n-1].sex,stu[n-1].grade);
+			goto mainInterface;//删除特定数组，并重新输入
+		}
+		if (flag == 4)
+		{
+			goto mainInterface;
+		}
+		else
+			printf("It's error\n");
+	}
+
+	//**************************记录管理************************
+	if (flag == 3) 
+	{
+		system("cls");//清屏
+		puts("1.记录提取\n");
+		puts("2.返回主页面\n");
+		puts("========  =========\n");
+		printf("请选择：\n");
+		scanf("%d", &flag);
+		if (flag == 1) 
+		{
+			printf("姓名    记录【0为到勤，1为缺勤】\n");
+			for(b=0;b<num;b++)
+			{
+				printf("%s\t %d\n",stu[b].name,score[b]);
+			}
+			printf("已经提取完成！");	//数组提取和对应的时间
+		}
+		if (flag == 2)
+		{
+			goto mainInterface;
+		}
+		else
+			printf("It's error\n");
+	}
+
+	else
+	{
+		printf("It's error!\n\n\n");
+		getchar();
+		printf("<---回到主页面\n\n\n");
+		system("pause");
+		system("cls");
+		goto mainInterface;
+	}
+	
+
+	return 0;
+}
+
+
+
+/********************时钟记录******************************/
+void update()
+{
+	if (second <= 60 && mintue <= 60 && hour <= 24)
+	{
+		second++;
+		if (second == 60) {
+			second = 0;
+			mintue++;
+		}
+		if (mintue == 60) {
+			mintue = 0;
+			hour++;
+		}
+		if (hour == 24) {
+			hour = 0;
+		}
+	}
+	else
+		printf("It's error.");
+}
+void display()
+{
+	printf("%02d:%02d:%02d", hour, mintue, second);
+	printf("\b\b\b\b\b\b\b\b");
+}
+void delay()
+{
+	int t;
+	for (t = 0; t < 400000000; t++) {
+		//使用循环体为空来延时
+	}
+}//关于其中时间现在还没有弄出来
+
+
+ /****************指纹签到********************/
 
